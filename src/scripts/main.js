@@ -9,8 +9,8 @@ const removeCol = document.querySelector('.remove-column');
 const appendRow = document.querySelector('.append-row');
 const appendCol = document.querySelector('.append-column');
 
-let columCount = firstRow.querySelectorAll('td').length;
-let rowCount = table.querySelectorAll('tbody tr').length;
+let columCount = 4;
+let rowCount = 4;
 
 function buttonDisabled() {
   removeCol.disabled = columCount <= 2;
