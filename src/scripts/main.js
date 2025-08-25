@@ -9,8 +9,9 @@ const removeCol = document.querySelector('.remove-column');
 const appendRow = document.querySelector('.append-row');
 const appendCol = document.querySelector('.append-column');
 
-let columCount = 4;
-let rowCount = 4;
+let columCount = table.querySelectorAll('tbody tr').length;
+
+let rowCount = firstRow.querySelectorAll('td').length;
 
 function buttonDisabled() {
   removeCol.disabled = columCount <= 2;
@@ -22,6 +23,11 @@ function buttonDisabled() {
 buttonDisabled();
 
 container.addEventListener('click', (ave) => {
+  if (ave.target.classList[0] === 'button') {
+    go(ave.target.classList[1]);
+    buttonDisabled();
+  }
+
   go(ave.target.classList[0]);
   buttonDisabled();
 });
