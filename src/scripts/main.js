@@ -29,6 +29,10 @@ container.addEventListener('click', (ave) => {
 function go(clasName) {
   switch (clasName) {
     case 'append-column':
+      if (columCount >= 10) {
+        return;
+      }
+
       table.querySelectorAll('tr').forEach((element) => {
         const td = document.createElement('td');
 
@@ -40,6 +44,10 @@ function go(clasName) {
       break;
 
     case 'append-row':
+      if (rowCount >= 10) {
+        return;
+      }
+
       const tr = document.createElement('tr');
 
       firstRow.querySelectorAll('td').forEach(() => {
@@ -54,11 +62,19 @@ function go(clasName) {
       break;
 
     case 'remove-row':
+      if (rowCount <= 2) {
+        return;
+      }
+
       table.querySelector('tbody').lastElementChild.remove();
       rowCount--;
       break;
 
     case 'remove-column':
+      if (columCount <= 2) {
+        return;
+      }
+
       table.querySelectorAll('tr').forEach((row) => {
         row.lastElementChild.remove();
       });
