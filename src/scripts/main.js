@@ -1,80 +1,71 @@
 'use strict';
 
-const table = document.querySelector('.field');
-const appendRowButton = document.querySelector('.append-row');
-const removeRowButton = document.querySelector('.remove-row');
-const appendColumnButton = document.querySelector('.append-column');
-const removeColumnButton = document.querySelector('.remove-column');
-const tbody = table.querySelector('tbody');
+const container = document.querySelector('.container');
+const table = document.querySelector('table');
+const firstRow = document.querySelector('tbody tr');
 
-let rows = 4;
-let cols = 4;
+const removeRow = document.querySelector('.remove-row');
+const removeCol = document.querySelector('.remove-column');
+const appendRow = document.querySelector('.append-row');
+const appendCol = document.querySelector('.append-column');
 
-function updateButtons() {
-  appendRowButton.disabled = rows === 10;
-  removeRowButton.disabled = rows === 2;
-  appendColumnButton.disabled = cols === 10;
-  removeColumnButton.disabled = cols === 2;
+let rowCount = firstRow.querySelectorAll('td').length;
+let columCount = table.querySelectorAll('tbody tr').length;
+
+function buttonDisabled() {
+  removeCol.disabled = columCount <= 2;
+  removeRow.disabled = rowCount <= 2;
+  appendCol.disabled = columCount >= 10;
+  appendRow.disabled = rowCount >= 10;
 }
 
-appendColumnButton.addEventListener('click', () => {
-  if (cols < 10) {
-    cols++;
+buttonDisabled();
 
-    const allRows = table.querySelectorAll('tr');
-
-    allRows.forEach((row) => {
-      const td = document.createElement('td');
-
-      row.appendChild(td);
-    });
-  }
-
-  updateButtons();
+container.addEventListener('click', (ave) => {
+  go(ave.target.classList[0]);
+  buttonDisabled();
 });
 
-removeColumnButton.addEventListener('click', () => {
-  if (cols > 2) {
-    cols--;
+function go(clasName) {
+  switch (clasName) {
+    case 'append-column':
+      table.querySelectorAll('tr').forEach((element) => {
+        const td = document.createElement('td');
 
-    const allRows = table.querySelectorAll('tr');
+        element.append(td);
+      });
 
-    allRows.forEach((row) => {
-      row.removeChild(row.lastElementChild);
-    });
+      columCount++;
 
-    updateButtons();
+      break;
+
+    case 'append-row':
+      const tr = document.createElement('tr');
+
+      firstRow.querySelectorAll('td').forEach(() => {
+        const td = document.createElement('td');
+
+        tr.append(td);
+      });
+
+      table.querySelector('tbody').append(tr);
+
+      rowCount++;
+      break;
+
+    case 'remove-row':
+      table.querySelector('tbody').lastElementChild.remove();
+      rowCount--;
+      break;
+
+    case 'remove-column':
+      table.querySelectorAll('tr').forEach((row) => {
+        row.lastElementChild.remove();
+      });
+
+      columCount--;
+      break;
+    default:
+      break;
   }
-});
-
-appendRowButton.addEventListener('click', () => {
-  if (rows < 10) {
-    rows++;
-
-    const newRow = document.createElement('tr');
-
-    for (let i = 0; i < cols; i++) {
-      const td = document.createElement('td');
-
-      newRow.appendChild(td);
-    }
-
-    tbody.appendChild(newRow);
-  }
-
-  updateButtons();
-});
-
-removeRowButton.addEventListener('click', () => {
-  const allRows = table.rows;
-
-  if (rows > 2) {
-    rows--;
-
-    table.deleteRow(allRows.length - 1);
-
-    updateButtons();
-  }
-});
-
-updateButtons();
+}
